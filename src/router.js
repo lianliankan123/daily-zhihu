@@ -3,29 +3,26 @@ import Router from 'vue-router'
 import home from './views/home'
 import article from './views/article'
 import theme from './views/theme'
-Vue.use( Router )
-const router = new Router( {
+import user from './views/user'
+Vue.use(Router)
+const router = new Router({
 	mode: 'hash',
-	routes: [
-		{
-			path: '/',
-			component: home,
-			name: 'home'
-		},
-		{
-			path: '/article',
-			component: article,
-			name: 'article'
-		},
-		{
-			path: '/theme',
-			component: theme,
-			name: 'theme'
-		},
-		{
-			path: '*',
-			redirect: '/'
-		}
-	]
-} )
+	routes: [{
+		path: '/home',
+		component: home,
+		name: 'home'
+	}, {
+		path: '/article',
+		component: article,
+		name: 'article'
+	}, {
+		path: '/theme',
+		component: theme,
+		name: 'theme'
+	}, {
+		path: "/user",
+		component: user,
+		name: 'user'
+	}]
+})
 export default router

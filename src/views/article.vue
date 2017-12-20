@@ -1,18 +1,50 @@
 <template>
-<div class="con">
-	<div class="loading" v-if="!data.body">
-		<span class="left"></span>
-		<span class="middle"></span>
-		<span class="right"></span>
-	</div>
-	<div v-if="data.image" class="con-img">
-		<img :src="data.image" />
-		<div class="con-img-mask"></div>
-		<h2>{{data.title}}</h2>
-	</div>
-	<div class="con-answer" @click.prevent="pop($event)" v-html="data.body"></div>
-	<back-scroll :scroller="scroller" :flag="circle"></back-scroll>
-</div>
+    <div class="con">
+        <div class="loading" v-if="false">
+            <span class="left"></span>
+            <span class="middle"></span>
+            <span class="right"></span>
+        </div>
+        <div class="con-img">
+            <img src="static/cat2.jpg" />
+            <div class="con-img-mask"></div>
+            <h2>{{data.title}}123</h2>
+        </div>
+        <!-- <div v-if="data.image" class="con-img">
+            <img :src="data.image" />
+            <div class="con-img-mask"></div>
+            <h2>{{data.title}}</h2>
+        </div> -->
+        <div class="user-box">
+            <div class="list-con">
+                <img src="static/cat2.jpg">
+                <div class="conteng-box">HYH</div>
+            </div>
+        </div>
+        <div class="con-answer">
+            <p>Vue官方文档的基础篇看完感觉好像没学到什么,找些小项目练练,</p>
+            <p>结果用sublime text3时,不支持.vue文件,写什么都是白色的,没有语法高亮显示,</p>
+            <p>辣眼睛。。</p>
+            <p>就看见了可怜见可怜见可怜见看来</p>
+            <p>Vue官方文档的基础篇看完感觉好像没学到什么,找些小项目练练,</p>
+            <p>结果用sublime text3时,不支持.vue文件,写什么都是白色的,没有语法高亮显示,</p>
+            <p>辣眼睛。。</p>
+            <p>就看见了可怜见可怜见可怜见看来</p>
+            <p>Vue官方文档的基础篇看完感觉好像没学到什么,找些小项目练练,</p>
+            <p>结果用sublime text3时,不支持.vue文件,写什么都是白色的,没有语法高亮显示,</p>
+            <p>辣眼睛。。</p>
+            <p>就看见了可怜见可怜见可怜见看来</p>
+            <img src="static/cat2.jpg"/>
+        </div>
+        <div class="tool-box">
+            <i>喜欢</i>
+            <i>评论</i>
+            <i>收藏</i>
+        </div>
+
+        <!-- <div class="con-answer" @click.prevent="pop($event)" v-html="data.body"></div> -->
+        <back-scroll :scroller="scroller" :flag="circle"></back-scroll>
+    </div>
 </template>
 <script>
 import api from './../api/index'
@@ -30,21 +62,21 @@ export default {
 	activated: function() {
 		let vue = this,
 			id = this.$route.query.id;
-		if (this.article.hasOwnProperty(id)) {
-			this.data = this.article[id];
-		} else {
-			api.getNewsById(id).then(function(data) {
-				vue.article[id] = data.data;
-				vue.data = data.data;
-			});
-		}
+		// if (this.article.hasOwnProperty(id)) {
+		// 	this.data = this.article[id];
+		// } else {
+		// 	api.getNewsById(id).then(function(data) {
+		// 		vue.article[id] = data.data;
+		// 		vue.data = data.data;
+		// 	});
+		// }
 	},
 	deactivated: function() {
 		this.data = "";
 	},
 	data() {
 		return {
-			data: "",
+			data: {"title":"「新片」十月份，值得你走进影院的电影总会有一些"},
 			scroller: window
 		}
 	},
@@ -58,7 +90,8 @@ export default {
 	}
 }
 </script>
-<style lang="less">@red: #FC4482;
+<style lang="less">
+@red: #FC4482;
 @yellow: #FFD300;
 @blue: #5B7492;
 @gray: #acb9c8;
@@ -102,9 +135,15 @@ img {
             position: absolute;
         }
     }
+    .user-box{
+        padding: 5%;
+        position: relative;
+        top: -1.5rem;
+    }
     .con-answer {
         padding: 5%;
         position: relative;
+        top: -1.5rem;
         h2,
         li,
         p {
@@ -186,6 +225,14 @@ img {
                 z-index: 1;
                 position: relative;
             }
+        }
+    }
+    .tool-box{
+        padding: 5%;
+        position: relative;
+        top: -1.5rem;
+        i{
+            margin: 0 10px;
         }
     }
 }

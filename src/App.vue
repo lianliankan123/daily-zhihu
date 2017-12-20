@@ -10,14 +10,38 @@
 				<span>首页</span>
 				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 1,'icon-ic_star':num != 1}" />
 			</li>
-			<li :class="{chose:num == x.id}" v-for="(x, index) in list" @click="change(x.id)">
+			<li :class="{chose:num == 2}" @click="change(2)">
+				<span>关注</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 2,'icon-ic_star':num != 2}" />
+			</li>
+			<li :class="{chose:num == 3}" @click="change(3)">
+				<span>发现</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 3,'icon-ic_star':num != 3}" />
+			</li>
+			<li :class="{chose:num == 4}" @click="change(4)">
+				<span>潮流穿搭</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 4,'icon-ic_star':num != 4}" />
+			</li>
+			<li :class="{chose:num == 5}" @click="change(5)">
+				<span>我的装扮</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 5,'icon-ic_star':num != 5}" />
+			</li>
+			<li :class="{chose:num == 6}" @click="change(6)">
+				<span>我的服饰</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 6,'icon-ic_star':num != 6}" />
+			</li>
+			<li :class="{chose:num == 7}" @click="change(7)">
+				<span>用户</span>
+				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 7,'icon-ic_star':num != 7}" />
+			</li>
+			<!-- <li :class="{chose:num == x.id}" v-for="(x, index) in list" @click="change(x.id)">
 				<span>{{x.name}}</span>
 				<i class="iconfont " :class="{'iconcolor icon-ic_star_black':num == x.id,'icon-ic_star':num != x.id}" />
 			</li>
 			<li @click="jump()">
 				<span>项目地址</span>
 				<i class="iconfont icon-github" />
-			</li>
+			</li> -->
 		</ul>
 		<div class="cover" @touchmove="prevent"></div>
 	</aside>
@@ -68,6 +92,7 @@
 					}
 					clearTimeout(vue.timer);
 				}, 300);
+				//alert(this.num);
 				to.path == '/' && this.num != 1 && this.$store.commit('add', 1);
 				this.transitionName = to.path != "/article" ? 'slide-right' : 'slide-left';
 			}
@@ -96,12 +121,15 @@
 			},
 			change(id) {
 				let path = id == 1 ? 'home' : 'theme';
+				if(id == 7)
+				    path = 'user';
 				this.$router.push({
 					path: path,
 					query: {
 						id: id || ""
 					}
 				});
+
 				this.$store.commit('add', id);
 			},
 			prevent(event) {
@@ -120,7 +148,7 @@
 					height -= scrollTop;
 					if (height <= 0) {
 						dom.scrollTop = 0;
-						vue.$store.commit('toggle');
+						vue.$store.commit('toglge');
 						clearInterval(time);
 					} else {
 						dom.scrollTop = height;
