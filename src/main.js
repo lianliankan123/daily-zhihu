@@ -6,11 +6,15 @@ import router from './router'
 import backScroll from './components/backScroll'
 import swipe from './components/swipe/swipe.vue'
 import infinite from './components/infiniteScroll'
+import Icon from 'vue-svg-icon/Icon.vue'
+
 Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.component(backScroll.name, backScroll)
 Vue.component(swipe.name, swipe)
 Vue.component(infinite.name, infinite)
+Vue.component('icon', Icon)
+
 const store = new Vuex.Store({
 	state: {
 		num: 1,
@@ -18,7 +22,8 @@ const store = new Vuex.Store({
 		circleFlag: false,
 		theme: {},
 		article: {},
-		before: ''
+		before: '',
+        showSearch: true //搜索框
 	},
 	mutations: {
 		add: (state, n) => state.num = n,
@@ -35,16 +40,20 @@ const store = new Vuex.Store({
 			} else {
 				state.circleFlag = false
 			}
-		}
+		},
+        searchControl(state){
+		    state.showSearch ? false : true;
+        }
 	}
 })
+
 new Vue({
 	el: '#app',
 	router,
 	store,
 	template: '<App/>',
 	components: {
-		App
+		App,
 	}
 })
 let indexScrollTop = 0;
@@ -72,3 +81,4 @@ router.afterEach((to, from, next) => {
 		});
 	}
 });
+

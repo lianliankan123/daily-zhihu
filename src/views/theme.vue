@@ -54,6 +54,7 @@ export default {
 	},
 	data() {
 		return {
+            scroller: window,
 			list: {"stories":[{"type":0,"id":7400530,"title":"哪些电影有浓厚的建筑人文意味？"},
 					{"images":["http:\/\/pic4.zhimg.com\/e43e1f7d8dfce546c4e95e944bcfb6cb_t.jpg"],
 						"type":2,"id":7260659,"title":"「新片」十月份，值得你走进影院的电影总会有一些"},

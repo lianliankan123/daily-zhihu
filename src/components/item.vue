@@ -19,9 +19,9 @@
 	}
 </script>
 <style lang="less" scoped>
-	.box{
+	/*.box{
 		position: relative;
-		
+
 		margin: 10px 0px;
 		padding: 10px;
 
@@ -43,7 +43,7 @@
 		p{
 			height: auto;
 		}
-	}
+	}*/
 	.list-con{
 		position: relative;
 	}

@@ -1,17 +1,36 @@
 <template>
 <div id="app">
 	<header class="header">
-		<i v-if="!flag" class="iconfont icon-ic_menu" @click="toggle(true)"></i>
+		<!--<i v-if="!flag" class="head-icon" @click="toggle(true)">-->
+			<!--<icon slot="icon" name="snowMan" scale="4"></icon>-->
+		<!--</i>-->
+		<div class="search">
+			<search v-if="!flag"
+					@result-click="resultClick"
+					@on-change="getResult"
+					:results="results"
+					v-model="value"
+					position="absolute"
+					@on-focus="onFocus"
+					@on-cancel="onCancel"
+					@on-submit="onSubmit"
+					ref="search"></search>
+		</div>
+
 		<i v-if="flag" class="iconfont icon-ic_back" @click="back()"></i>
 	</header>
 	<aside class="aside" :class="{open:open,docked:docked}" @click="toggle()">
 		<ul>
+			<div class="user-info" @click="change(7)">
+				<div class="head"><icon slot="icon" name="snowMan" scale="10"></icon></div>
+				<div class="info">HYH</div>
+			</div>
 			<li :class="{chose:num == 1}" @click="change(1)">
 				<span>首页</span>
 				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 1,'icon-ic_star':num != 1}" />
 			</li>
 			<li :class="{chose:num == 2}" @click="change(2)">
-				<span>关注</span>
+				<span>我的衣柜</span>
 				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 2,'icon-ic_star':num != 2}" />
 			</li>
 			<li :class="{chose:num == 3}" @click="change(3)">
@@ -27,20 +46,12 @@
 				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 5,'icon-ic_star':num != 5}" />
 			</li>
 			<li :class="{chose:num == 6}" @click="change(6)">
-				<span>我的服饰</span>
+				<span>设置</span>
 				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 6,'icon-ic_star':num != 6}" />
-			</li>
-			<li :class="{chose:num == 7}" @click="change(7)">
-				<span>用户</span>
-				<i class="iconfont" :class="{'iconcolor icon-ic_star_black':num == 7,'icon-ic_star':num != 7}" />
 			</li>
 			<!-- <li :class="{chose:num == x.id}" v-for="(x, index) in list" @click="change(x.id)">
 				<span>{{x.name}}</span>
 				<i class="iconfont " :class="{'iconcolor icon-ic_star_black':num == x.id,'icon-ic_star':num != x.id}" />
-			</li>
-			<li @click="jump()">
-				<span>项目地址</span>
-				<i class="iconfont icon-github" />
 			</li> -->
 		</ul>
 		<div class="cover" @touchmove="prevent"></div>
@@ -53,6 +64,29 @@
 			<router-view class="app-view" :class="{'app-view-hidden':docked}"></router-view>
 		</keep-alive>
 	</transition>
+
+
+	<tabbar style="z-index: 10 !important;">
+		<tabbar-item link="/home">
+			<icon slot="icon" name="sun" scale="20" spin></icon>
+			<!--<span slot="label">首页</span>-->
+		</tabbar-item>
+		<tabbar-item link="/article">
+			<icon slot="icon" name="chameleon" scale="20" class="animation"></icon>
+		</tabbar-item>
+		<!--<tabbar-item link="theme">-->
+			<!--<icon slot="icon" name="pie" scale="20" class="animation"></icon>-->
+			<!--<span slot="label">Explore</span>-->
+		<!--</tabbar-item>-->
+		<!--<tabbar-item link="theme">-->
+			<!--<icon slot="icon" name="pie" scale="20" class="animation"></icon>-->
+			<!--<span slot="label">Explore</span>-->
+		<!--</tabbar-item>-->
+		<tabbar-item badge="2" link="/userIndex">
+			<icon slot="icon" name="snowMan" scale="4"></icon>
+			<!--<span slot="label">个人主页</span>-->
+		</tabbar-item>
+	</tabbar>
 </div>
 </template>
 
@@ -60,6 +94,8 @@
 	import {
 		mapState
 	} from 'vuex'
+    import { Tabbar, TabbarItem, Group, Cell, Search} from 'vux'
+	import extraMenu from './components/extraMenu'
 	import api from './api/index'
 	export default {
 		computed: mapState({
@@ -79,9 +115,29 @@
 				timer:'',
 				open: false,
 				docked: false,
-				transitionName: 'slide-left'
+				transitionName: 'slide-left',
+				results:[
+				    {title:'hello',otherData:'hyh'},
+					{title:'what',otherData:'huya'},
+                    {title:'hello',otherData:'hyh'},
+                    {title:'what',otherData:'huya'},
+                    {title:'hello',otherData:'hyh'},
+                    {title:'what',otherData:'huya'},
+                    {title:'hello',otherData:'hyh'},
+                    {title:'what',otherData:'huya'},
+
+				],
+                value:''
 			}
 		},
+        components: {
+            Tabbar,
+            TabbarItem,
+            Group,
+            Cell,
+            Search,
+            extraMenu
+        },
 		watch: {
 			'$route' (to, from) {
 				let vue = this;
@@ -92,7 +148,6 @@
 					}
 					clearTimeout(vue.timer);
 				}, 300);
-				//alert(this.num);
 				to.path == '/' && this.num != 1 && this.$store.commit('add', 1);
 				this.transitionName = to.path != "/article" ? 'slide-right' : 'slide-left';
 			}
@@ -148,18 +203,106 @@
 					height -= scrollTop;
 					if (height <= 0) {
 						dom.scrollTop = 0;
-						vue.$store.commit('toglge');
+						vue.$store.commit('toggle');
 						clearInterval(time);
 					} else {
 						dom.scrollTop = height;
 					}
 				}, 1);
-			}
+			},
+			setFocus () {
+                this.$refs.search.setFocus()
+            },
+            resultClick (item) {
+                window.alert('you click the result item: ' + JSON.stringify(item))
+            },
+            getResult (val) {
+                console.log('on-change', val)
+                //this.results = val ? getResult(this.value) : []
+            },
+            onSubmit () {
+                this.$refs.search.setBlur()
+                this.$vux.toast.show({
+                    type: 'text',
+                    position: 'top',
+                    text: 'on submit'
+                })
+            },
+            onFocus () {
+                console.log('on focus')
+            },
+            onCancel () {
+                console.log('on cancel')
+            }
 		}
 	}
 </script>
 
 <style lang="less">
+	p{
+		margin: 0;
+	}
+	.shadow-box{
+		position: relative;
+
+		margin: 10px 0px;
+		padding: 10px;
+
+		display: flex;
+
+		background-color: #fff;
+
+		border-width: 0.15rem;
+		border-color: #ccc;
+		border-radius: 5px;
+		box-shadow: 0 3px 10px 0 rgba(91, 115, 146, 0.15);
+
+		img{
+			width: 2rem;
+			height: 100%;
+			margin-right: 0.4rem;
+
+		}
+		p{
+			height: auto;
+		}
+	}
+	.user-info{
+		.head{
+			text-align: center;
+		}
+		.info{
+			text-align: center;
+		}
+	}
+	.head-icon{
+		position: relative;
+		top: 10px;
+
+	}
+	.animation {
+		animation: changeColor 5s infinite;
+	}
+	@keyframes changeColor {
+		0% {
+			color: red;
+		}
+		20% {
+			color: yellow;
+		}
+		40% {
+			color: blue;
+		}
+		60% {
+			color: green;
+		}
+		80% {
+			color: purple;
+		}
+		100% {
+			color: gold;
+		}
+	}
 	.slide-left-enter,
 	.slide-right-leave-active {
 		opacity: 0;
@@ -173,6 +316,7 @@
 	}
 
 	.app-view {
+		padding-bottom: 70px;
 		z-index: 1;
 		width: 100vw;
 		height: 100vh;
@@ -188,16 +332,19 @@
 
 	.header {
 		width: 100%;
-		height: 1.5rem;
 		z-index: 9;
-		padding-left: 5%;
-		position: fixed;
-		background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.51) 95%);
+		position: relative;
+		//background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.51) 95%);
+		background-color: #fff;
 		.iconfont {
-			color: #fff;
+			color: #000;
 			font-size: 0.8rem;
-			top: 20%;
-			position: relative;
+
+			position: absolute;
+			z-index: 10;
+			top: 7px;
+			left: 10px;
+
 		}
 	}
 
@@ -221,9 +368,10 @@
 			float: left;
 			width: 60%;
 			height: 100%;
-			padding: 1.3rem 0.5rem 0.5rem;
+			padding: 0.5rem 0.5rem 0.5rem;
 			overflow: auto;
-			background: rgba(91, 116, 146, 0.75);
+			//background: rgba(91, 116, 146, 0.75);
+			background-color: #eee;
 			transform: translate(-100%, 0);
 			transition: transform 0.3s ease;
 			-webkit-overflow-scrolling: touch;
@@ -239,7 +387,7 @@
 			cursor: pointer;
 			font-size: 0.43rem;
 			list-style: none;
-			color: #fff;
+			color: #aaa;
 			margin-top: 20px;
 			.iconfont {
 				float: right;
@@ -280,7 +428,7 @@
 		background: rgba(255, 255, 255, 0.80);
 		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.50);
 		right: 5%;
-		bottom: 5vw;
+		bottom: 17vw;
 		position: fixed;
 		z-index: 10;
 		i {

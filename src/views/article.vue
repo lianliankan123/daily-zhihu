@@ -8,13 +8,13 @@
         <div class="con-img">
             <img src="static/cat2.jpg" />
             <div class="con-img-mask"></div>
-            <h2>{{data.title}}123</h2>
+            <h2>{{title}}123</h2>
         </div>
-        <!-- <div v-if="data.image" class="con-img">
-            <img :src="data.image" />
-            <div class="con-img-mask"></div>
-            <h2>{{data.title}}</h2>
-        </div> -->
+        <!--<div v-if="data.image" class="con-img">-->
+            <!--<img :src="data.image" />-->
+            <!--<div class="con-img-mask"></div>-->
+            <!--<h2>{{data.title}}</h2>-->
+        <!--</div>-->
         <div class="user-box">
             <div class="list-con">
                 <img src="static/cat2.jpg">
@@ -43,11 +43,13 @@
         </div>
 
         <!-- <div class="con-answer" @click.prevent="pop($event)" v-html="data.body"></div> -->
+        <model-obj src="example/models/obj/LeePerrySmith.obj"></model-obj>
         <back-scroll :scroller="scroller" :flag="circle"></back-scroll>
     </div>
 </template>
 <script>
 import api from './../api/index'
+import { ModelObj } from 'vue-3d-model'
 import {
 	mapState
 } from 'vuex'
@@ -76,7 +78,7 @@ export default {
 	},
 	data() {
 		return {
-			data: {"title":"「新片」十月份，值得你走进影院的电影总会有一些"},
+			title:"「新片」十月份，值得你走进影院的电影总会有一些",
 			scroller: window
 		}
 	},
@@ -87,7 +89,8 @@ export default {
 				window.open(href);
 			}
 		}
-	}
+	},
+    components: { ModelObj }
 }
 </script>
 <style lang="less">

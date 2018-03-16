@@ -2,12 +2,13 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+const vuxLoader = require('vux-loader')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-module.exports = {
+originalConfig = {
   entry: {
     app: './src/main.js'
   },
@@ -19,7 +20,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json','less'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -56,3 +57,8 @@ module.exports = {
     ]
   }
 }
+
+const webpackConfig = originalConfig
+module.exports = vuxLoader.merge(webpackConfig, {
+    plugins: ['vux-ui']
+})
